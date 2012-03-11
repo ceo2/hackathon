@@ -1,5 +1,6 @@
 import java.io.File
 import scala.collection.mutable.ArrayBuffer
+import mp3avs.MusicCollection
     
 object MP3AVS {
 
@@ -11,7 +12,7 @@ object MP3AVS {
     var musicCollection = scanMusicCollection(directoryPath)
     
     println ("Die Musiksammlung hat folgende Interpreter: ")
-    for (interpret <- musicCollection)
+    for (interpret <- musicCollection.interpreterList())
     	println(interpret)
   //  giveExistingAlbums()
   //  diffOfAlums()
@@ -22,17 +23,20 @@ object MP3AVS {
 
   }
   
-  def scanMusicCollection(path: String) : Array[String] =
+  def scanMusicCollection(path: String) : MusicCollection =
   {
 	  val source = new File(path)
 	  val interpretPathList = source.listFiles().filter(_.isDirectory)
-	  val musicCol = ArrayBuffer[String]()
+	  val musicCol = new MusicCollection()
+	  
 	  for (interpret <- interpretPathList)
-	    musicCol += interpret.toString()
-//  children.toIterator ++ children.toIterator.flatMap(subdirs _) 
+	  {
+	    val albumPathList = interpret.listFiles().filter(_.isDirectory)
+	    for (album <- albumPathList)
+	    	musicCol.addAlbum(album.getName().toString(), interpret.getName().toString())
+	  }
 
-//    var musicCol = Array(path, "zweiter Eintrag")
-      musicCol.toArray
+      musicCol
   }
  
 
