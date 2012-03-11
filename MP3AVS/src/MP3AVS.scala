@@ -1,3 +1,6 @@
+import java.io.File
+import scala.collection.mutable.ArrayBuffer
+    
 object MP3AVS {
 
   def main(args: Array[String]): Unit = 
@@ -21,8 +24,15 @@ object MP3AVS {
   
   def scanMusicCollection(path: String) : Array[String] =
   {
-    var musicCol = Array(path, "zweiter Eintrag")
-    musicCol
+	  val source = new File(path)
+	  val interpretPathList = source.listFiles().filter(_.isDirectory)
+	  val musicCol = ArrayBuffer[String]()
+	  for (interpret <- interpretPathList)
+	    musicCol += interpret.toString()
+//  children.toIterator ++ children.toIterator.flatMap(subdirs _) 
+
+//    var musicCol = Array(path, "zweiter Eintrag")
+      musicCol.toArray
   }
  
 
